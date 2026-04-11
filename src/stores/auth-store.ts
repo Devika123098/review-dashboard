@@ -3,28 +3,36 @@
  *
  * 📍 src/stores/auth-store.ts
  *
- * Global auth state management using Zustand.
- * Handles user role and session state.
+ * Global auth state using Zustand with persist.
+ * Stores muid, roles, college_code, profile_pic from public profile.
  */
 
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
+interface UserProfileData {
+  fullName: string;
+  muid: string;
+  roles: string[];
+  collegeCode: string | null;
+  profilePic: string | null;
+}
+
 interface AuthState {
-  role: string | null;
-  setRole: (role: string | null) => void;
+  userProfile: UserProfileData | null;
+  setUserProfile: (profile: UserProfileData | null) => void;
   resetAuth: () => void;
 }
 
 export const useAuthStore = create<AuthState>()(
   persist(
     (set) => ({
-      role: null,
-      setRole: (role) => set({ role }),
-      resetAuth: () => set({ role: null }),
+      userProfile: null,
+      setUserProfile: (profile) => set({ userProfile: profile }),
+      resetAuth: () => set({ userProfile: null }),
     }),
     {
-      name: "auth-storage",
+      name: "intern-user",
     },
   ),
 );

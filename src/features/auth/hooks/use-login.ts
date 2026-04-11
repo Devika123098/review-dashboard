@@ -11,6 +11,7 @@
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { authStore } from "@/lib/auth";
+import { useAuthStore } from "@/stores/auth-store";
 import {
   fetchPublicUserProfile,
   loginWithOTP,
@@ -49,6 +50,15 @@ export function useLoginWithPassword() {
       // 3. Fetch user info immediately after login
       const userInfo = await fetchPublicUserProfile(emailOrMuid);
 
+      // 4. Set user profile in store (Zustand with persist)
+      useAuthStore.getState().setUserProfile({
+        fullName: userInfo.full_name,
+        muid: userInfo.muid,
+        roles: userInfo.roles,
+        collegeCode: userInfo.college_code,
+        profilePic: userInfo.profile_pic,
+      });
+
       return {
         tokens: tokenData,
         userInfo,
@@ -85,6 +95,15 @@ export function useLoginWithOTP() {
 
       // 3. Fetch user info immediately after login
       const userInfo = await fetchPublicUserProfile(emailOrMuid);
+
+      // 4. Set user profile in store (Zustand with persist)
+      useAuthStore.getState().setUserProfile({
+        fullName: userInfo.full_name,
+        muid: userInfo.muid,
+        roles: userInfo.roles,
+        collegeCode: userInfo.college_code,
+        profilePic: userInfo.profile_pic,
+      });
 
       return {
         tokens: tokenData,
