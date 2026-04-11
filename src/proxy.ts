@@ -17,6 +17,7 @@
 
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
+import { MANAGEMENT_ROLES } from "./lib/auth";
 
 // ─── Inline Route Access Map ───────────────────────────────
 // We inline the route config here because middleware runs on the edge
@@ -29,15 +30,10 @@ interface RouteConfig {
 
 const ROLE_VALUES = {
   ADMIN: "Admins",
-  DISCORD_MODERATOR: "Discord Moderator",
   FELLOW: "Fellow",
   ASSOCIATE: "Associate",
-  ZONAL_CAMPUS_LEAD: "Zonal Campus Lead",
-  DISTRICT_CAMPUS_LEAD: "District Campus Lead",
-  CAMPUS_LEAD: "Campus Lead",
-  LEAD_ENABLER: "Lead Enabler",
-  TECH_TEAM: "Tech Team",
-  IG_LEAD: "IG Lead",
+  APPRAISER: "Appraiser",
+  INTERN: "Intern",
 } as const;
 
 /**
@@ -46,75 +42,18 @@ const ROLE_VALUES = {
  * Empty roles array = any authenticated user.
  */
 const ROLE_PROTECTED_ROUTES: Record<string, RouteConfig> = {
-  // Campus Lead
-  "/dashboard/campus/manage": {
-    roles: [ROLE_VALUES.CAMPUS_LEAD, ROLE_VALUES.LEAD_ENABLER],
+  // Intern routes: Intern + Management (includes Admin)
+  "/dashboard/intern": {
+    roles: [ROLE_VALUES.INTERN, ...MANAGEMENT_ROLES],
+  },
+  "/dashboard/intern/weekly-review": {
+    roles: [ROLE_VALUES.INTERN, ...MANAGEMENT_ROLES],
   },
 
-  // Zonal/District
-  "/dashboard/zonal": {
-    roles: [
-      ROLE_VALUES.ADMIN,
-      ROLE_VALUES.FELLOW,
-      ROLE_VALUES.ZONAL_CAMPUS_LEAD,
-    ],
-  },
-  "/dashboard/district": {
-    roles: [
-      ROLE_VALUES.ADMIN,
-      ROLE_VALUES.FELLOW,
-      ROLE_VALUES.DISTRICT_CAMPUS_LEAD,
-    ],
-  },
-
-  // Admin-only
-  "/dashboard/admin": { roles: [ROLE_VALUES.ADMIN] },
-
-  // Management (Admin + Fellow baseline, specific sub-routes may differ)
-  "/dashboard/management": {
-    roles: [ROLE_VALUES.ADMIN, ROLE_VALUES.FELLOW],
-  },
-  "/dashboard/management/user-management": { roles: [ROLE_VALUES.ADMIN] },
-  "/dashboard/management/manage-achievements": { roles: [ROLE_VALUES.ADMIN] },
-  "/dashboard/management/manage-interest-groups": {
-    roles: [ROLE_VALUES.ADMIN],
-  },
-  "/dashboard/management/manage-roles": { roles: [ROLE_VALUES.ADMIN] },
-  "/dashboard/management/organizations": { roles: [ROLE_VALUES.ADMIN] },
-  "/dashboard/management/college-levels": { roles: [ROLE_VALUES.ADMIN] },
-  "/dashboard/management/manage-locations": { roles: [ROLE_VALUES.ADMIN] },
-  "/dashboard/management/channels": { roles: [ROLE_VALUES.ADMIN] },
-  "/dashboard/management/error-log": {
-    roles: [ROLE_VALUES.ADMIN, ROLE_VALUES.TECH_TEAM],
-  },
-  "/dashboard/management/discord-moderation": {
-    roles: [ROLE_VALUES.ADMIN, ROLE_VALUES.DISCORD_MODERATOR],
-  },
-  "/dashboard/management/dynamic-type": { roles: [ROLE_VALUES.ADMIN] },
-  "/dashboard/management/manage-skills": { roles: [ROLE_VALUES.ADMIN] },
-  "/dashboard/management/manage-launchpad": { roles: [ROLE_VALUES.ADMIN] },
-  "/dashboard/management/manage-departments": { roles: [ROLE_VALUES.ADMIN] },
-  "/dashboard/management/affiliation": { roles: [ROLE_VALUES.ADMIN] },
-  "/dashboard/management/organization-transfer": {
-    roles: [ROLE_VALUES.ADMIN],
-  },
-
-  // URL Shortener (broader access)
-  "/dashboard/url-shortener": {
-    roles: [ROLE_VALUES.ADMIN, ROLE_VALUES.FELLOW, ROLE_VALUES.ASSOCIATE],
-  },
-
-  "/dashboard/interest-groups": {
-    roles: [ROLE_VALUES.ADMIN, ROLE_VALUES.FELLOW, ROLE_VALUES.IG_LEAD],
-  },
-
-  // Tasks
-  "/dashboard/tasks": { roles: [ROLE_VALUES.ADMIN] },
-
-  // Events Management
-  "/dashboard/manage-events": {
-    roles: [ROLE_VALUES.ADMIN, ROLE_VALUES.FELLOW, ROLE_VALUES.ASSOCIATE],
-  },
+  // Admin routes: Management only (Admin, Associate, Fellow, Appraiser)
+  "/dashboard/admin": { roles: MANAGEMENT_ROLES },
+  "/dashboard/admin/weekly-report-generator": { roles: MANAGEMENT_ROLES },
+  "/dashboard/admin/event-report": { roles: MANAGEMENT_ROLES },
 };
 
 // ─── Route Classification ──────────────────────────────────
@@ -229,9 +168,8 @@ export function proxy(request: NextRequest) {
         const hasAccess = routeConfig.roles.some((r) => userRoles.includes(r));
 
         if (!hasAccess) {
-          // Redirect to dashboard with unauthorized flag
-          const url = new URL("/dashboard", request.url);
-          url.searchParams.set("unauthorized", "true");
+          // Redirect to unauthorized page
+          const url = new URL("/unauthorized", request.url);
           return NextResponse.redirect(url);
         }
       }

@@ -34,7 +34,7 @@ export const useUIStore = create<UIState>()(
         }),
     }),
     {
-      name: "ui-storage", // content of the store (isSidebarExpanded) will be stored in localStorage
+      name: "sidebar-ui", // content of the store (isSidebarExpanded) will be stored in localStorage
     },
   ),
 );

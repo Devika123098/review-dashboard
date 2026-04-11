@@ -30,6 +30,14 @@ export const MANAGEMENT_ROLES = [
   ROLES.ADMIN,
   ROLES.ASSOCIATE,
   ROLES.FELLOW,
+  ROLES.APPRAISER,
+] as const;
+
+/** Non-admin management roles (Associate, Fellow, Appraiser) */
+export const NON_ADMIN_MANAGEMENT_ROLES = [
+  ROLES.ASSOCIATE,
+  ROLES.FELLOW,
+  ROLES.APPRAISER,
 ] as const;
 
 /** Roles that can view interest group dashboards */

@@ -32,5 +32,5 @@ export function getRoleHomePath(roles: string[]): string {
   }
 
   // ── Default: Student, Mentor, Enabler, Company, Pre Member, etc.
-  return "/dashboard";
+  return "/unauthorized";
 }

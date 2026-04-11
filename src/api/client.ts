@@ -7,6 +7,7 @@
 
 import type { z } from "zod";
 import { refreshAccessToken } from "@/features/auth";
+import { useInternStore } from "@/stores/intern-store";
 import { env } from "../../config/env";
 import { authStore } from "../lib/auth";
 import { ApiError, extractDjangoMessage } from "./errors";
@@ -58,6 +59,7 @@ function handleTokenExpiry(rawData: unknown): void {
       )
     ) {
       authStore.clearTokens();
+      useInternStore.getState().resetAuth();
       window.location.href = "/login";
     }
   }
@@ -128,6 +130,7 @@ async function request<T>(
 
       if (!refreshToken) {
         authStore.clearTokens();
+        useInternStore.getState().resetAuth();
         if (typeof window !== "undefined") {
           window.location.href = "/login";
         }
@@ -144,6 +147,7 @@ async function request<T>(
 
         if (!newAccessToken) {
           authStore.clearTokens();
+          useInternStore.getState().resetAuth();
           if (typeof window !== "undefined") {
             window.location.href = "/login";
           }
@@ -175,6 +179,7 @@ async function request<T>(
 
         if (retryRes.status === 401 || retryRes.status === 403) {
           authStore.clearTokens();
+          useInternStore.getState().resetAuth();
           if (typeof window !== "undefined") {
             window.location.href = "/login";
           }
@@ -197,6 +202,7 @@ async function request<T>(
         return retryData?.response ?? (retryData as T);
       } catch {
         authStore.clearTokens();
+        useInternStore.getState().resetAuth();
         if (typeof window !== "undefined") {
           window.location.href = "/login";
         }

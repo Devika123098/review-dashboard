@@ -19,11 +19,9 @@ import { NAV_ITEMS, type NavItem } from "@/lib/nav-config";
 
 interface UseFilteredNavReturn {
   /** Main navigation items visible to the current user */
-  mainItems: NavItem[];
+  internItems: NavItem[];
   /** Management/admin items visible to the current user */
-  managementItems: NavItem[];
-  /** Bottom section items visible to the current user */
-  bottomItems: NavItem[];
+  adminItems: NavItem[];
   /** Whether permissions are still loading */
   isLoading: boolean;
 }
@@ -39,16 +37,17 @@ export function useFilteredNav(): UseFilteredNavReturn {
       }
       // Role-based check
       if (item.roles && item.roles.length > 0) {
-        return hasRole(item.roles);
+        return hasRole(
+          typeof item.roles === "string" ? [item.roles] : item.roles,
+        );
       }
 
       return false;
     });
 
     return {
-      mainItems: visible.filter((item) => item.section === "main"),
-      managementItems: visible.filter((item) => item.section === "management"),
-      bottomItems: visible.filter((item) => item.section === "bottom"),
+      internItems: visible.filter((item) => item.section === "intern"),
+      adminItems: visible.filter((item) => item.section === "admin"),
     };
   }, [hasRole]);
 

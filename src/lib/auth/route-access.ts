@@ -13,7 +13,7 @@
  * - More specific routes take precedence over general ones
  */
 
-import { ROLES } from "./roles";
+import { MANAGEMENT_ROLES, ROLES } from "./roles";
 
 // ─── Types ──────────────────────────────────────────────────
 
@@ -25,13 +25,28 @@ export interface RouteConfig {
 // ─── Route Access Map ──────────────────────────────────────
 
 export const routeAccessMap: Record<string, RouteConfig> = {
-  // ── Public Dashboard (any authenticated user) ────────────
+  // ── Dashboard Home (any authenticated user) ───────────────
   "/dashboard": { roles: [] },
-  "/dashboard/intern": { roles: [ROLES.INTERN] },
+
+  // ── Intern Routes ────────────────────────────────────────
+  // Allow: Intern + Management roles
+  "/dashboard/intern": {
+    roles: [ROLES.INTERN, ...MANAGEMENT_ROLES],
+  },
+  "/dashboard/intern/weekly-review": {
+    roles: [ROLES.INTERN, ...MANAGEMENT_ROLES],
+  },
 
   // ── Admin Routes ─────────────────────────────────────────
+  // Allow: Management roles only (Admin, Associate, Fellow, Appraiser)
   "/dashboard/admin": {
-    roles: [ROLES.ADMIN],
+    roles: [...MANAGEMENT_ROLES],
+  },
+  "/dashboard/admin/weekly-report-generator": {
+    roles: [...MANAGEMENT_ROLES],
+  },
+  "/dashboard/admin/event-report": {
+    roles: [...MANAGEMENT_ROLES],
   },
 };
 

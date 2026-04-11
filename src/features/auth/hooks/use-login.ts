@@ -10,8 +10,9 @@
 "use client";
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { authStore } from "@/lib/auth";
-import { useAuthStore } from "@/stores/auth-store";
+import { useRouter } from "next/navigation";
+import { authStore, MANAGEMENT_ROLES, ROLES } from "@/lib/auth";
+import { useInternStore } from "@/stores/intern-store";
 import {
   fetchPublicUserProfile,
   loginWithOTP,
@@ -29,29 +30,40 @@ interface LoginWithOTPParams {
   otp: string;
 }
 
+const ALLOWED_ROLES = [...MANAGEMENT_ROLES, ROLES.INTERN] as const;
+
+function hasAllowedRole(roles: string[]): boolean {
+  return roles.some((role) =>
+    ALLOWED_ROLES.includes(role as (typeof ALLOWED_ROLES)[number]),
+  );
+}
+
 /**
  * Hook for password-based login
  */
 export function useLoginWithPassword() {
   const queryClient = useQueryClient();
+  const router = useRouter();
 
   return useMutation({
     mutationFn: async ({ emailOrMuid, password }: LoginWithPasswordParams) => {
-      // 1. Login and get tokens (API returns data directly, not wrapped)
       const tokenData = await loginWithPassword(emailOrMuid, password);
 
-      // 2. Save tokens to store (cookies)
       authStore.setTokens(
         tokenData.accessToken,
         tokenData.refreshToken,
         emailOrMuid,
       );
 
-      // 3. Fetch user info immediately after login
       const userInfo = await fetchPublicUserProfile(emailOrMuid);
 
-      // 4. Set user profile in store (Zustand with persist)
-      useAuthStore.getState().setUserProfile({
+      if (!hasAllowedRole(userInfo.roles)) {
+        authStore.clearTokens();
+        router.replace("/unauthorized");
+        throw new Error("Unauthorized role");
+      }
+
+      useInternStore.getState().setUserProfile({
         fullName: userInfo.full_name,
         muid: userInfo.muid,
         roles: userInfo.roles,
@@ -65,7 +77,6 @@ export function useLoginWithPassword() {
       };
     },
     onSuccess: (data, variables) => {
-      // Clear stale queries — clear() removes without refetching (safe post-login)
       queryClient.clear();
       queryClient.setQueryData(
         authKeys.publicProfile(variables.emailOrMuid),
@@ -80,10 +91,10 @@ export function useLoginWithPassword() {
  */
 export function useLoginWithOTP() {
   const queryClient = useQueryClient();
+  const router = useRouter();
 
   return useMutation({
     mutationFn: async ({ emailOrMuid, otp }: LoginWithOTPParams) => {
-      // 1. Login with OTP (API returns data directly)
       const tokenData = await loginWithOTP(emailOrMuid, otp);
 
       // 2. Save tokens
@@ -93,11 +104,15 @@ export function useLoginWithOTP() {
         emailOrMuid,
       );
 
-      // 3. Fetch user info immediately after login
       const userInfo = await fetchPublicUserProfile(emailOrMuid);
 
-      // 4. Set user profile in store (Zustand with persist)
-      useAuthStore.getState().setUserProfile({
+      if (!hasAllowedRole(userInfo.roles)) {
+        authStore.clearTokens();
+        router.replace("/unauthorized");
+        throw new Error("Unauthorized role");
+      }
+
+      useInternStore.getState().setUserProfile({
         fullName: userInfo.full_name,
         muid: userInfo.muid,
         roles: userInfo.roles,
@@ -111,7 +126,6 @@ export function useLoginWithOTP() {
       };
     },
     onSuccess: (data, variables) => {
-      // Clear stale queries — clear() removes without refetching (safe post-login)
       queryClient.clear();
       queryClient.setQueryData(
         authKeys.publicProfile(variables.emailOrMuid),

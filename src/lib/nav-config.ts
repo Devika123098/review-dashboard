@@ -13,26 +13,12 @@
  */
 
 import type { LucideIcon } from "lucide-react";
-import {
-  BookOpen,
-  Calendar,
-  GraduationCap,
-  Home,
-  Link,
-  Map as MapIcon,
-  Rocket,
-  Search,
-  Settings,
-  Shield,
-  Trophy,
-  User,
-  Users,
-} from "lucide-react";
+import { Cpu, File, Home, Link } from "lucide-react";
 import { MANAGEMENT_ROLES, ROLES } from "@/lib/auth/roles";
 
 // ─── Types ──────────────────────────────────────────────────
 
-export type NavSection = "main" | "management" | "bottom";
+export type NavSection = "intern" | "admin";
 
 export interface NavItem {
   /** Unique identifier for the item */
@@ -49,10 +35,15 @@ export interface NavItem {
    * Direct role check (fallback when no single permission fits).
    * If set, item is visible to users who have any of these roles.
    */
-  roles?: readonly string[];
+  roles?: string | readonly string[];
 }
 
 // ─── Navigation Items ───────────────────────────────────────
+
+export const WEEKLY_REVIEW_ROLES = [
+  ...ROLES.INTERN,
+  ...MANAGEMENT_ROLES,
+] as const;
 
 export const NAV_ITEMS: readonly NavItem[] = [
   // ── Main Section (all authenticated users) ────────────────
@@ -61,95 +52,30 @@ export const NAV_ITEMS: readonly NavItem[] = [
     title: "Home",
     href: "/dashboard",
     icon: Home,
-    section: "main",
+    section: "intern",
   },
   {
-    id: "profile",
-    title: "Profile",
-    href: "/dashboard/profile",
-    icon: User,
-    section: "main",
+    id: "intern-form",
+    title: "Weekly Review Form",
+    href: "/dashboard/intern/weekly-review",
+    icon: Link,
+    section: "intern",
   },
-  {
-    id: "mujourney",
-    title: "μJourney",
-    href: "/dashboard/mujourney",
-    icon: MapIcon,
-    section: "main",
-  },
-  {
-    id: "interest-groups",
-    title: "Interest Groups",
-    href: "/dashboard/interest-groups",
-    icon: Users,
-    section: "main",
-  },
-  {
-    id: "learning-circle",
-    title: "Learning Circle",
-    href: "/dashboard/learning-circle",
-    icon: BookOpen,
-    section: "main",
-  },
-  {
-    id: "courses",
-    title: "Courses",
-    href: "/dashboard/courses",
-    icon: GraduationCap,
-    section: "main",
-  },
-  {
-    id: "search",
-    title: "Search",
-    href: "/dashboard/search",
-    icon: Search,
-    section: "main",
-  },
-  {
-    id: "events",
-    title: "Events",
-    href: "/dashboard/events",
-    icon: Calendar,
-    section: "main",
-  },
-  {
-    id: "leaderboard",
-    title: "Leaderboard",
-    href: "/dashboard/leaderboard",
-    icon: Trophy,
-    section: "main",
-  },
-  {
-    id: "muverse",
-    title: "µVerse",
-    href: "/dashboard/muverse",
-    icon: Rocket,
-    section: "main",
-  },
-
   // ── Management Section (role-gated) ───────────────────────
   {
-    id: "management",
-    title: "Management",
-    href: "/dashboard/management",
-    icon: Shield,
-    section: "management",
+    id: "weekly-report-generator",
+    title: "Weekly Report Generator",
+    href: "/dashboard/admin/weekly-report-generator",
+    icon: Cpu,
+    section: "admin",
     roles: MANAGEMENT_ROLES,
   },
   {
-    id: "url-shortener",
-    title: "Url Shortner",
-    href: "/dashboard/url-shortener",
-    icon: Link,
-    section: "management",
+    id: "event-report",
+    title: "Event Report",
+    href: "/dashboard/admin/event-report",
+    icon: File,
+    section: "admin",
     roles: MANAGEMENT_ROLES,
-  },
-  // ── Bottom Section (all authenticated users) ──────────────
-  {
-    id: "settings",
-    title: "Settings",
-    href: "/dashboard/settings",
-    icon: Settings,
-    section: "bottom",
   },
 ] as const;

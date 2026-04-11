@@ -58,14 +58,13 @@ export function LoginForm({
 
   return (
     <div className="w-full space-y-6">
-      {/* Mobile Logo - Hidden on desktop */}
-      <div className="lg:hidden flex justify-center mb-8">
+      <div className="flex justify-center mb-8">
         <Link href="/">
           <Image
             src="/logo.webp"
             alt="μLearn"
             width={100}
-            height={32}
+            height={100}
             priority
           />
         </Link>
@@ -228,17 +227,6 @@ export function LoginForm({
           Continue with Apple
         </Button>
       </div>
-
-      {/* Register Link */}
-      <p className="text-center text-sm text-muted-foreground">
-        Don&apos;t have an account?{" "}
-        <Link
-          href="/register"
-          className="font-medium text-primary hover:underline"
-        >
-          Sign up
-        </Link>
-      </p>
     </div>
   );
 }

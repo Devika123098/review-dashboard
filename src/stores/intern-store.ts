@@ -24,7 +24,7 @@ interface AuthState {
   resetAuth: () => void;
 }
 
-export const useAuthStore = create<AuthState>()(
+export const useInternStore = create<AuthState>()(
   persist(
     (set) => ({
       userProfile: null,

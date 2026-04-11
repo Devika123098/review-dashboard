@@ -18,19 +18,11 @@ const geist = Geist({
 
 export const metadata: Metadata = {
   title: {
-    default: "μLearn Dashboard",
-    template: "%s | μLearn",
+    default: "Intern Review Dashboard",
+    template: "%s | Intern Review Dashboard",
   },
   description:
-    "μLearn is a community-driven learning platform empowering students to learn, build, and grow together.",
-  keywords: [
-    "mulearn",
-    "learning",
-    "students",
-    "community",
-    "technology",
-    "education",
-  ],
+    "Intern Review Dashboard is a platform for reviewing interns and teams based on their weekly performance.",
 };
 
 export default function RootLayout({

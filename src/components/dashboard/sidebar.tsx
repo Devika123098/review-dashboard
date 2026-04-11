@@ -20,19 +20,21 @@ import { useFilteredNav } from "@/hooks/use-filtered-nav";
 import { authStore } from "@/lib/auth";
 import type { NavItem } from "@/lib/nav-config";
 import { cn } from "@/lib/utils";
+import { useInternStore } from "@/stores/intern-store";
 import { useUIStore } from "@/stores/ui-store";
 
 export function Sidebar() {
   const pathname = usePathname();
   const router = useRouter();
   const { isSidebarExpanded, toggleSidebar } = useUIStore();
-  const { mainItems, managementItems, bottomItems } = useFilteredNav();
+  const { internItems, adminItems } = useFilteredNav();
   const [isMobileOpen, setIsMobileOpen] = useState(false);
 
   const isCollapsed = !isSidebarExpanded;
 
   const handleLogout = useCallback(() => {
     authStore.clearTokens();
+    useInternStore.getState().resetAuth();
     useUIStore.getState().resetUI();
     toast.success("Logged out successfully");
     router.replace("/login");
@@ -189,20 +191,20 @@ export function Sidebar() {
             isCollapsed ? "p-2" : "p-4",
           )}
         >
-          {mainItems.map(renderNavItem)}
+          {internItems.map(renderNavItem)}
 
-          {/* Management Section (only renders if user has management items) */}
-          {managementItems.length > 0 && (
+          {/* Admin Section (only renders if user has admin items) */}
+          {adminItems.length > 0 && (
             <>
               <div className="pt-4 pb-1">
                 {!isCollapsed && (
                   <span className="px-3 text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-                    Management
+                    Admin
                   </span>
                 )}
                 {isCollapsed && <div className="border-t border-border mx-2" />}
               </div>
-              {managementItems.map(renderNavItem)}
+              {adminItems.map(renderNavItem)}
             </>
           )}
         </nav>
@@ -214,8 +216,6 @@ export function Sidebar() {
             isCollapsed ? "p-2" : "p-4",
           )}
         >
-          {bottomItems.map(renderNavItem)}
-
           {/* Logout Button */}
           <button
             onClick={handleLogout}

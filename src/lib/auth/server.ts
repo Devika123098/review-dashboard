@@ -12,8 +12,8 @@
 
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import { serverApiClient } from "../../api/server";
 import { hasAnyRole } from "@/hooks/use-permissions";
+import { serverApiClient } from "../../api/server";
 
 /**
  * Check if the user is authenticated (has an access token).
@@ -126,7 +126,7 @@ export async function requireRole(
   const user = await requireAuth();
 
   if (allowedRoles.length > 0 && !hasAnyRole(user.roles, allowedRoles)) {
-    redirect("/dashboard?unauthorized=true");
+    redirect("/unauthorized");
   }
 
   return user;
