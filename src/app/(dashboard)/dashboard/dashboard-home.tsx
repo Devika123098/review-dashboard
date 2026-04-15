@@ -9,7 +9,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 
-export function DashboardContent() {
+export function DashboardHome() {
   return (
     <div className="min-h-screen bg-background p-6 space-y-6">
       <div>
