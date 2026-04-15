@@ -1,0 +1,134 @@
+/**
+ * Auth Feature Schemas
+ *
+ * 📍 src/features/auth/schemas/auth.schema.ts
+ *
+ * Zod schemas for all auth-related API requests and responses.
+ * Types are derived from these schemas - no manual typing.
+ */
+
+import { z } from "zod";
+
+// ============================================
+// Common Response Wrapper
+// ============================================
+
+/**
+ * Standard Django API response wrapper
+ */
+export const ApiResponseSchema = <T extends z.ZodTypeAny>(dataSchema: T) =>
+  z.object({
+    hasError: z.boolean(),
+    statusCode: z.number(),
+    message: z.record(z.string(), z.array(z.string())).optional(),
+    response: dataSchema,
+  });
+
+// ============================================
+// Login Schemas
+// ============================================
+
+/**
+ * Login request - supports password OR OTP login
+ */
+export const LoginRequestSchema = z
+  .object({
+    emailOrMuid: z.string().min(1, "Email or MuID is required"),
+    password: z.string().optional(),
+    otp: z.string().optional(),
+  })
+  .refine((data) => data.password || data.otp, {
+    message: "Either password or OTP is required",
+  });
+
+/**
+ * Login response - tokens returned on successful auth
+ */
+export const LoginResponseDataSchema = z.object({
+  accessToken: z.string(),
+  refreshToken: z.string(),
+  expiry: z.string().optional(),
+});
+
+export const LoginResponseSchema = ApiResponseSchema(LoginResponseDataSchema);
+
+// ============================================
+// OTP Request Schemas
+// ============================================
+
+export const RequestOTPRequestSchema = z.object({
+  emailOrMuid: z.string().min(1, "Email or MuID is required"),
+});
+
+export const RequestOTPResponseSchema = ApiResponseSchema(z.object({}));
+
+// ============================================
+// Token Refresh Schemas
+// ============================================
+
+export const RefreshTokenRequestSchema = z.object({
+  refreshToken: z.string(),
+});
+
+export const RefreshTokenResponseDataSchema = z.object({
+  accessToken: z.string(),
+});
+
+export const RefreshTokenResponseSchema = ApiResponseSchema(
+  RefreshTokenResponseDataSchema,
+);
+
+// ============================================
+// User Profile Schemas
+// ============================================
+
+export const InterestGroupSchema = z.object({
+  id: z.string(),
+  name: z.string(),
+  karma: z.number(),
+});
+
+export const KarmaDistributionSchema = z.object({
+  task_type: z.string(),
+  karma: z.number(),
+});
+
+export const UserProfileSchema = z.object({
+  full_name: z.string(),
+  college_code: z.string().nullable(),
+  college_id: z.string().nullable(),
+  org_district_id: z.string().nullable(),
+  interest_groups: z.array(InterestGroupSchema),
+  karma_distribution: z.array(KarmaDistributionSchema),
+  gender: z.string().nullable(),
+  id: z.string(),
+  joined: z.string(),
+  karma: z.number(),
+  rank: z.number(),
+  muid: z.string(),
+  level: z.string(),
+  profile_pic: z.string().nullable(),
+  is_public: z.boolean(),
+  percentile: z.number(),
+  roles: z.array(z.string()),
+});
+
+export const UserProfileResponseSchema = ApiResponseSchema(UserProfileSchema);
+
+// ============================================
+// Derived Types
+// ============================================
+
+export type LoginRequest = z.infer<typeof LoginRequestSchema>;
+export type LoginResponse = z.infer<typeof LoginResponseSchema>;
+export type LoginResponseData = z.infer<typeof LoginResponseDataSchema>;
+
+export type RequestOTPRequest = z.infer<typeof RequestOTPRequestSchema>;
+
+export type RefreshTokenRequest = z.infer<typeof RefreshTokenRequestSchema>;
+export type RefreshTokenResponse = z.infer<typeof RefreshTokenResponseSchema>;
+
+export type UserProfile = z.infer<typeof UserProfileSchema>;
+export type UserProfileResponse = z.infer<typeof UserProfileResponseSchema>;
+export type InterestGroup = z.infer<typeof InterestGroupSchema>;
+export type KarmaDistribution = z.infer<typeof KarmaDistributionSchema>;

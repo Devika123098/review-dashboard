@@ -1,0 +1,98 @@
+/**
+ * Auth API Functions
+ *
+ * 📍 src/features/auth/api/auth.api.ts
+ *
+ * All auth-related API calls go through here.
+ * NO direct fetch calls in components or hooks.
+ * NO React dependencies - this is pure data layer.
+ *
+ * Pattern: Validate full response, extract and return inner data.
+ */
+
+import { apiClient, publicApiClient } from "@/api/client";
+import { endpoints } from "@/api/endpoints";
+import {
+  type LoginResponseData,
+  LoginResponseSchema,
+  RefreshTokenResponseSchema,
+  RequestOTPResponseSchema,
+  type UserProfile,
+  UserProfileResponseSchema,
+} from "../schemas";
+
+// ============================================
+// Login Functions
+// ============================================
+
+/**
+ * Login with email/muid and password
+ */
+export async function loginWithPassword(
+  emailOrMuid: string,
+  password: string,
+): Promise<LoginResponseData> {
+  const response = await apiClient.post(
+    endpoints.auth.login,
+    { emailOrMuid, password },
+    LoginResponseSchema,
+  );
+  return response.response;
+}
+
+/**
+ * Login with email/muid and OTP
+ */
+export async function loginWithOTP(
+  emailOrMuid: string,
+  otp: string,
+): Promise<LoginResponseData> {
+  const response = await apiClient.post(
+    endpoints.auth.login,
+    { emailOrMuid, otp },
+    LoginResponseSchema,
+  );
+  return response.response;
+}
+
+/**
+ * Request OTP for login
+ */
+export async function requestLoginOTP(emailOrMuid: string): Promise<void> {
+  await apiClient.post(
+    endpoints.auth.requestOTP,
+    { emailOrMuid },
+    RequestOTPResponseSchema,
+  );
+}
+
+// ============================================
+// Token Functions
+// ============================================
+
+/**
+ * Refresh access token using refresh token
+ */
+export async function refreshAccessToken(
+  refreshToken: string,
+): Promise<{ accessToken: string }> {
+  const response = await publicApiClient.post(
+    endpoints.auth.refreshToken,
+    { refreshToken },
+    RefreshTokenResponseSchema,
+  );
+  return response.response;
+}
+
+/**
+ * Get public user profile by muid
+ */
+export async function fetchPublicUserProfile(
+  muid: string,
+): Promise<UserProfile> {
+  const response = await apiClient.get(
+    endpoints.user.publicProfile(muid),
+    UserProfileResponseSchema,
+  );
+  return response.response;
+}

@@ -1,0 +1,402 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+  --radius-3xl: calc(var(--radius) + 12px);
+  --radius-4xl: calc(var(--radius) + 16px);
+}
+
+:root {
+  --radius: 0.625rem;
+  --background: #fefefe;
+  --foreground: oklch(0.145 0 0);
+  --card: #fefefe;
+  --card-foreground: oklch(0.145 0 0);
+  --popover: #fefefe;
+  --popover-foreground: oklch(0.145 0 0);
+  --primary: #0961f5;
+  --primary-foreground: oklch(0.985 0 0);
+  --secondary: #fefefe;
+  --secondary-foreground: oklch(0.205 0 0);
+  --muted: #f1f5f9;
+  --muted-foreground: oklch(0.556 0 0);
+  --accent: #f1f5f9;
+  --accent-foreground: oklch(0.205 0 0);
+  --destructive: oklch(0.577 0.245 27.325);
+  --destructive-foreground: oklch(0.985 0 0);
+  --border: #e2e8f0;
+  --input: #e2e8f0;
+  --ring: #0961f5;
+  --chart-1: oklch(0.646 0.222 41.116);
+  --chart-2: oklch(0.6 0.118 184.704);
+  --chart-3: oklch(0.398 0.07 227.392);
+  --chart-4: oklch(87.844% 0.14895 88.606);
+  --chart-5: oklch(0.769 0.188 70.08);
+  --sidebar: oklch(0.985 0 0);
+  --sidebar-foreground: oklch(0.145 0 0);
+  --sidebar-primary: oklch(0.205 0 0);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.97 0 0);
+  --sidebar-accent-foreground: oklch(0.205 0 0);
+  --sidebar-border: oklch(0.922 0 0);
+  --sidebar-ring: oklch(0.708 0 0);
+}
+
+.dark {
+  --background: oklch(0.145 0 0);
+  --foreground: oklch(0.985 0 0);
+  --card: oklch(0.145 0 0);
+  --card-foreground: oklch(0.985 0 0);
+  --popover: oklch(0.145 0 0);
+  --popover-foreground: oklch(0.985 0 0);
+  --primary: #0961f5;
+  --primary-foreground: oklch(0.985 0 0);
+  --secondary: oklch(0.269 0 0);
+  --secondary-foreground: oklch(0.985 0 0);
+  --muted: oklch(0.269 0 0);
+  --muted-foreground: oklch(0.708 0 0);
+  --accent: oklch(0.269 0 0);
+  --accent-foreground: oklch(0.985 0 0);
+  --destructive: oklch(0.396 0.141 25.723);
+  --destructive-foreground: oklch(0.985 0 0);
+  --border: oklch(0.269 0 0);
+  --input: oklch(0.269 0 0);
+  --ring: #0961f5;
+  --chart-1: oklch(0.488 0.243 264.376);
+  --chart-2: oklch(0.696 0.17 162.48);
+  --chart-3: oklch(0.769 0.188 70.08);
+  --chart-4: oklch(0.627 0.265 303.9);
+  --chart-5: oklch(0.645 0.246 16.439);
+  --sidebar: oklch(0.205 0 0);
+  --sidebar-foreground: oklch(0.985 0 0);
+  --sidebar-primary: #0961f5;
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.269 0 0);
+  --sidebar-accent-foreground: oklch(0.985 0 0);
+  --sidebar-border: oklch(0.269 0 0);
+  --sidebar-ring: #0961f5;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5 {
+  font-family: var(--font-display);
+}
+
+* {
+  -ms-overflow-style: none;
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+
+::-webkit-scrollbar {
+  display: none;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+  h1 {
+    @apply text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black leading-tight;
+  }
+  h2 {
+    @apply text-2xl sm:text-3xl md:text-4xl font-bold leading-snug;
+  }
+  h3 {
+    @apply text-xl md:text-2xl font-semibold;
+  }
+  h4 {
+    @apply text-lg font-semibold;
+  }
+  h5,
+  h6 {
+    @apply text-base font-medium;
+  }
+  p {
+    @apply text-base leading-relaxed;
+  }
+}
+
+@layer utilities {
+  /* Manage IG - category & status chips */
+  .ig-cat-maker {
+    background-color: color-mix(in srgb, var(--chart-5) 18%, var(--background));
+    color: var(--chart-5);
+  }
+  .ig-cat-coder {
+    background-color: color-mix(in srgb, var(--primary) 16%, var(--background));
+    color: var(--primary);
+  }
+  .ig-cat-creative {
+    background-color: color-mix(in srgb, var(--chart-4) 18%, var(--background));
+    color: var(--chart-4);
+  }
+  .ig-cat-manager {
+    background-color: color-mix(in srgb, var(--chart-2) 18%, var(--background));
+    color: var(--chart-2);
+  }
+  .ig-cat-others {
+    background-color: color-mix(
+      in srgb,
+      var(--muted-foreground) 12%,
+      var(--background)
+    );
+    color: var(--muted-foreground);
+  }
+  .ig-status-active {
+    background-color: color-mix(in srgb, var(--chart-2) 18%, var(--background));
+    color: var(--chart-2);
+  }
+  .ig-status-requested {
+    background-color: color-mix(in srgb, var(--chart-4) 18%, var(--background));
+    color: var(--chart-4);
+  }
+  .ig-status-rejected {
+    background-color: color-mix(
+      in srgb,
+      var(--destructive) 12%,
+      var(--background)
+    );
+    color: var(--destructive);
+  }
+  .ig-status-cancelled {
+    background-color: color-mix(
+      in srgb,
+      var(--muted-foreground) 12%,
+      var(--background)
+    );
+    color: var(--muted-foreground);
+  }
+
+  .gradient-1 {
+    background: linear-gradient(
+      135deg,
+      color-mix(in srgb, var(--primary) 10%, var(--background)),
+      color-mix(in srgb, var(--chart-1) 10%, var(--background))
+    );
+  }
+  .gradient-2 {
+    background: linear-gradient(
+      135deg,
+      color-mix(in srgb, var(--chart-1) 10%, var(--background)),
+      color-mix(in srgb, var(--chart-2) 10%, var(--background))
+    );
+  }
+  .gradient-3 {
+    background: linear-gradient(
+      135deg,
+      color-mix(in srgb, var(--chart-2) 10%, var(--background)),
+      color-mix(in srgb, var(--chart-3) 10%, var(--background))
+    );
+  }
+  .gradient-4 {
+    background: linear-gradient(
+      135deg,
+      color-mix(in srgb, var(--chart-3) 10%, var(--background)),
+      color-mix(in srgb, var(--chart-4) 10%, var(--background))
+    );
+  }
+  .gradient-5 {
+    background: linear-gradient(
+      135deg,
+      color-mix(in srgb, var(--chart-4) 10%, var(--background)),
+      color-mix(in srgb, var(--chart-5) 10%, var(--background))
+    );
+  }
+  .gradient-6 {
+    background: linear-gradient(
+      135deg,
+      color-mix(in srgb, var(--chart-5) 10%, var(--background)),
+      color-mix(in srgb, var(--primary) 10%, var(--background))
+    );
+  }
+
+  /* ── Home-page card backgrounds (uses theme palette only) ─────────── */
+  /* Learning Circles – soft teal/cyan tint */
+  .card-bg-circles {
+    background: linear-gradient(
+      135deg,
+      color-mix(in srgb, var(--chart-2) 22%, var(--background)),
+      color-mix(in srgb, var(--chart-3) 14%, var(--background))
+    );
+  }
+  /* Interest Groups – soft primary/blue tint */
+  .card-bg-groups {
+    background: linear-gradient(
+      135deg,
+      color-mix(in srgb, var(--primary) 18%, var(--background)),
+      color-mix(in srgb, var(--chart-2) 14%, var(--background))
+    );
+  }
+  /* Top Performers – warm gold/amber tint */
+  .card-bg-performers {
+    background: linear-gradient(
+      135deg,
+      color-mix(in srgb, var(--chart-4) 28%, var(--background)),
+      color-mix(in srgb, var(--chart-5) 20%, var(--background))
+    );
+  }
+
+  /* Shimmer animation for loading skeleton */
+  @keyframes shimmer {
+    0% {
+      background-position: -400px 0;
+    }
+    100% {
+      background-position: 400px 0;
+    }
+  }
+  .shimmer {
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      color-mix(in srgb, var(--primary) 8%, transparent) 50%,
+      transparent 100%
+    );
+    background-size: 400px 100%;
+    animation: shimmer 1.6s ease-in-out infinite;
+  }
+
+  /* Calendar event day animation */
+  .calendar-event-day {
+    font-weight: 600;
+  }
+
+  /* Utility: hide scrollbar but keep scroll */
+  .scrollbar-none {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .scrollbar-none::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* ============================================
+   Learning Circle — Studio-quality styles
+   ============================================ */
+
+@layer utilities {
+  .lc-font {
+    font-family: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+    font-feature-settings: "cv02", "cv03", "cv04";
+  }
+
+  .lc-card-shadow {
+    box-shadow:
+      0 1px 3px rgba(0, 0, 0, 0.06),
+      0 4px 16px rgba(0, 0, 0, 0.04);
+  }
+
+  .lc-card-shadow-hover {
+    box-shadow:
+      0 8px 32px rgba(0, 0, 0, 0.1),
+      0 2px 8px rgba(0, 0, 0, 0.06);
+  }
+
+  .lc-card-border {
+    border: 1px solid rgba(0, 0, 0, 0.06);
+  }
+
+  .lc-section-label {
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #9ca3af;
+  }
+
+  .lc-gradient-cta {
+    background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+  }
+
+  .lc-gradient-cta:hover {
+    background: linear-gradient(135deg, #4338ca 0%, #6d28d9 100%);
+  }
+
+  .lc-stat-counter {
+    animation: lc-count-up 600ms cubic-bezier(0.4, 0, 0.2, 1) both;
+  }
+
+  .lc-fade-in {
+    animation: lc-fade-in 300ms ease both;
+  }
+
+  .lc-slide-up {
+    animation: lc-slide-up 400ms cubic-bezier(0.4, 0, 0.2, 1) both;
+  }
+}
+
+@keyframes lc-count-up {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes lc-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes lc-slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
