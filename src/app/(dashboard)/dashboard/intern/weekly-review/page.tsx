@@ -295,10 +295,10 @@ export default function WeeklyReviewPage() {
                   <FormItem>
                     <FormLabel>Leave Days</FormLabel>
                     <FormControl>
-                      <Input
+                      <Textarea
                         {...field}
-                        type="number"
-                        placeholder="Enter leave days taken"
+                        placeholder="Enter leave days taken..."
+                        className="min-h-[80px] resize-none"
                       />
                     </FormControl>
                     <FormMessage />
